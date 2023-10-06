@@ -67,35 +67,117 @@
     <h3>Source Code</h3>
 
     <p class="code">
+        from machine import Pin,PWM <br>
+        import math<br>
+        import time<br>
+        <br>
+        led=Pin(18,Pin.OUT)<br>
+        button1=Pin(4,Pin.IN,Pin.PULL_UP)<br>
+        button2=Pin(0,Pin.IN,Pin.PULL_UP)<br>
+        <br>
+        passiveBuzzer=PWM(Pin(13),2000)<br>
+        <br>
+        C = 1047<br>
+        D = 1175<br>
+        E = 1319<br>
+        F = 1397<br>
+        G = 1568<br>
+        C7 = 2093<br>
+        <br>
+        rowTheBoat = [C, C, C, D, E, E, D,<br>
+        <span class="tab"></span>E, F, G, C7, C7, C7,<br>
+        <span class="tab"></span>G, G, G, E, E, E, C,<br>
+        <span class="tab"></span>C, C, G, F, E, D, C]<br>
+        <br>
+        rowTheBoatTime = [600, 600, 400, 200,<br>
+        <span class="tab"></span>600, 400, 200, 400, 200,<br>
+        <span class="tab"></span>1200, 200, 200, 200, 200,<br>
+        <span class="tab"></span>200, 200, 200, 200, 200,<br>
+        <span class="tab"></span>200, 200, 200, 400, 200,<br>
+        <span class="tab"></span>400, 200, 1200]<br>
+        <br>
+        maryTheLamb = [E, D, C, D, E, E, E,<br>
+        <span class="tab"></span>D, D, D, E, G, G, E,<br>
+        <span class="tab"></span>D, C, D, E, E, E, E,<br>
+        <span class="tab"></span>D, D, E, D, C]<br>
+        <br>
+        maryTheLambTime = [400, 400, 400, 400,<br>
+        <span class="tab"></span>400, 400, 800,<br>
+        <span class="tab"></span>400, 400, 800,<br>
+        <span class="tab"></span>400, 400, 800,<br>
+        <span class="tab"></span>400, 400, 400, 400,<br>
+        <span class="tab"></span>400, 400, 400, 400,<br>
+        <span class="tab"></span>400, 400, 400, 400,<br>
+        <span class="tab"></span>1600]<br>
+        <br>
+        def playSong(songNotes, songTime):<br>
+        <span class="tab"></span>for i in range(len(songNotes)):<br>
+        <span class="tab"></span><span class="tab"></span>passiveBuzzer.freq(songNotes[i])<br>
+        <span class="tab"></span><span class="tab"></span>time.sleep_ms((songTime[i]//2))<br>
+        <span class="tab"></span><span class="tab"></span>passiveBuzzer.freq(10)<br>
+        <span class="tab"></span><span class="tab"></span>if songNotes == maryTheLamb:<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>led.value(1)<br>
+        <span class="tab"></span><span class="tab"></span>else:<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>if i%2 == 0:<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>led.value(1)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>else:<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>led.value(0)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>
+        <span<br>
+            class="tab"></span>time.sleep_ms(500)
+            <span class="tab"></span>led.value(0)<br>
+            <br>
+            try:<br>
+            <span class="tab"></span>while True:<br>
+            <span class="tab"></span><span class="tab"></span>if not button1.value():<br>
+            <span class="tab"></span><span class="tab"></span><span class="tab"></span>passiveBuzzer.init()<br>
+            <span class="tab"></span><span class="tab"></span><span class="tab"></span>playSong(rowTheBoat,
+            rowTheBoatTime)<br>
+            <span class="tab"></span><span class="tab"></span>elif not button2.value():<br>
+            <span class="tab"></span><span class="tab"></span><span class="tab"></span>passiveBuzzer.init()<br>
+            <span class="tab"></span><span class="tab"></span><span class="tab"></span>playSong(maryTheLamb,
+            maryTheLambTime)<br>
+            <span class="tab"></span><span class="tab"></span>else:<br>
+            <span class="tab"></span><span class="tab"></span><span class="tab"></span>passiveBuzzer.deinit()<br>
+            except:<br>
+            <span class="tab"></span>passiveBuzzer.deinit()<br>
+
 
     </p>
 
     <h2>Project #2</h2>
 
     <h3>Description of what the lab assignment is about</h3>
-    <p></p>
+    <p>This assignment is meant to test our skill with using serial communication between two ESP 32's by making one
+        button <br>
+        communicate to the other ESP 32 turn a light on and play a sound and vice versa.</p>
 
     <h3>List of Hardware Components</h3>
 
     <ul>
-        <li>1 x RGB Led</li>
-        <li>1 x Freenove 8 RGB LED Module</li>
-        <li>9 x wires</li>
-        <li>3 x 220-ohm resistor</li>
-        <li>2 x 10k-ohm resistor</li>
-        <li>1 x push buttons</li>
+        <li>1 x Active Buzzer</li>
+        <li>10 x wires</li>
+        <li>1 x 220-ohm resistor</li>
+        <li>4 x 10k-ohm resistor</li>
+        <li>1 x 1k-ohm resistor</li>
+        <li>1 x NPN Transistor</li>
+        <li>1 x LED</li>
+        <li>2 x push buttons</li>
         <li>ESP 32</li>
+        X 2
     </ul>
 
 
     <h3>Circuit Diagram</h3>
-    <img src="Project_2_CircuitDiagram.jpg" width="1000" height="708">
+    <img src="Project_2_CircuitDiagram.jpg" width="1000" height="1000">
 
     <h3>Breadboard View</h3>
     <img src="Project_2_BreadboardView.jpg" width="1400" height="708">
 
     <h3>Breadboard Settings</h3>
-    <img src="Project_2.jpg" width="1000" height="708">
+    <img src="Project_2.jpg" width="1000" height="1200">
 
     <h3>Video</h3>
     <video controls autoplay>
@@ -105,6 +187,64 @@
     <h3>Source Code</h3>
 
     <p class="code">
+        from machine import UART,Pin,PWM<br>
+        import time<br>
+        <br>
+        usart_flag=0<br>
+        <br>
+        led=Pin(18,Pin.OUT)<br>
+        button1=Pin(4,Pin.IN,Pin.PULL_UP)<br>
+        activeBuzzer=Pin(13,Pin.OUT)<br>
+        <br>
+        activeBuzzer.value(0)<br>
+        # activeBuzzer.value(1)<br>
+        # print("before sleep")<br>
+        # time.sleep_ms(500)<br>
+        # print("aftersleep")<br>
+        # activeBuzzer.value(0)<br>
+        <br>
+        <br>
+        myUsart = UART(1, baudrate=9600, bits=8, parity=0, rx=5, tx=2, timeout=1)<br>
+        # myUsart.write(str("\r\nESP32 initialization completed!\r\n")+\<br>
+        # str("Please input some characters,\r\n")+\<br>
+        # str("select \"Newline\" below and click send button. \r\n"))<br>
+        sent = False<br>
+        <br>
+        while True:<br>
+        <br>
+        <span class="tab"></span>if not button1.value() and not sent:<br>
+        <span class="tab"></span><span class="tab"></span>myUsart.write(str("b"))<br>
+        <span class="tab"></span><span class="tab"></span>print("button working = True")<br>
+        <span class="tab"></span><span class="tab"></span>sent = True<br>
+        <br>
+        <span class="tab"></span>if myUsart.any():<br>
+        <span class="tab"></span><span class="tab"></span>usart_buffer=myUsart.read()<br>
+        <span class="tab"></span><span class="tab"></span>usart_flag=1<br>
+        <span class="tab"></span><span class="tab"></span>if str(usart_buffer) == "b'a'":<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>print("anything")<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span>for i in range(5):<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>activeBuzzer.value(1)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>led.value(1)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>print("activeBuzzer.working = True")<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>time.sleep_ms(500)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>activeBuzzer.value(0)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>led.value(0)<br>
+        <span class="tab"></span><span class="tab"></span><span class="tab"></span><span
+            class="tab"></span>time.sleep_ms(500)<br>
+
+        <span class="tab"></span>if usart_flag==1:<br>
+        <span class="tab"></span><span class="tab"></span># myUsart.write(usart_buffer+str("\r\n"))<br>
+        <span class="tab"></span><span class="tab"></span>usart_flag=0<br>
+        <span class="tab"></span><span class="tab"></span>print ("usart flag = True")<br>
+        <span class="tab"></span><span class="tab"></span>led.value(0)<br>
+        <br>
+        <br>
 
     </p>
 </body>
